@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Backgrounds/BG.png" type="Texture" id=2]
+[ext_resource path="res://PNG/Effects/star2.png" type="Texture" id=3]
+[ext_resource path="res://GUI/GUI.tscn" type="PackedScene" id=4]
+[ext_resource path="res://HUD/HUD.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Enemy/Spawner.gd" type="Script" id=9]
+[ext_resource path="res://Cam/ShakeCam.gd" type="Script" id=10]
+
+[node name="GamePlay" type="Node"]
+
+[node name="Bg" type="Sprite" parent="."]
+position = Vector2( -64, -56 )
+scale = Vector2( 0.619444, 0.558854 )
+z_index = -100
+texture = ExtResource( 2 )
+centered = false
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2( 272.929, 3.50843 )
+scale = Vector2( 0.5625, 0.835938 )
+amount = 60
+lifetime = 25.0
+speed_scale = 2.0
+texture = ExtResource( 3 )
+emission_shape = 2
+emission_rect_extents = Vector2( 90, 1 )
+direction = Vector2( 0, 1 )
+gravity = Vector2( 0, 0 )
+initial_velocity = 50.0
+initial_velocity_random = 0.6
+angle = 50.0
+angle_random = 0.65
+scale_amount = 0.5
+scale_amount_random = 0.2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource( 5 )]
+margin_left = 3.0
+margin_top = -2.0
+margin_right = 3.0
+margin_bottom = -2.0
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 267, 841 )
+speed = 250.0
+
+[node name="Spawner" type="Node2D" parent="."]
+position = Vector2( 268, -60 )
+script = ExtResource( 9 )
+
+[node name="SpawnTimer" type="Timer" parent="Spawner"]
+one_shot = true
+
+[node name="Cam" type="Camera2D" parent="."]
+anchor_mode = 0
+current = true
+script = ExtResource( 10 )
+
+[node name="GUI" parent="." instance=ExtResource( 4 )]
+
+[connection signal="timeout" from="Spawner/SpawnTimer" to="Spawner" method="_on_SpawnTimer_timeout"]
